@@ -7,7 +7,7 @@ pipeline{
         LISTA_CORREOS = "josecursoci@gmail.com"
         CUERPO_CORREO = "El pipeline ${BUILD_URL} terminó su prueba de manera"
         TITULO_CORREO = "${BUILD_URL} Resultado"
-      
+    }
     stages{
 
         stage("Confirmación despliegue"){
