@@ -2,7 +2,12 @@ pipeline{
     agent {
         label "linux-agent"
     }
-
+  
+    environment {
+        LISTA_CORREOS = "josecursoci@gmail.com"
+        CUERPO_CORREO = "El pipeline ${BUILD_URL} terminó su prueba de manera"
+        TITULO_CORREO = "${BUILD_URL} Resultado"
+      
     stages{
 
         stage("Confirmación despliegue"){
@@ -26,14 +31,6 @@ pipeline{
                 echo "Comando de las pruebas unitarias npm run test"
             }
         }
-/*
-        stage('Pruebas de seguridad-sonarqube'){
-            steps{
-                withSonarQubeEnv('SonarQubeCursoCI'){
-                    sh "/opt/sonar-scanner/bin/sonar-scanner -Dsonar.projectKey=AngularApp"
-                }
-            }
-        }*/
 
         stage ("Compilación de la aplicación"){
             steps{
@@ -41,40 +38,14 @@ pipeline{
             }
         }
 
-        /*post{
-            success {
-                emailext body: "La prueba ha finalizado con exito", subject: "Aviso", to: "josecursoci@gmail.com"
-            }
-            failure {
-                emailext body: "La prueba no finalizo con exito", subject: "Aviso", to: "josecursoci@gmail.com"
-            }
-        }*/
-
-        /*
-        when (branch 'dev'){
-            steps{
-                sh 'scp dist/AngularApp/* root@206.189.254.187:/usr/ucreativa/jose-dev/'
-            }
-        }
-        when (branch 'staging'){
-            steps{
-                sh "scp dist/AngularApp/* root@206.189.254.187:/usr/ucreativa/jose-staging/"
-            }
-        }
-        when (branch "main"){
-            steps{
-                sh "scp dist/AngularApp/* root@206.189.254.187:/usr/ucreativa/jose-prod/"
-            }
-        }
-        */
     }
 
     post{
         success {
-            emailext body: "La prueba fue exitosa", subject: "Aviso", to: "josecursoci@gmail.com"
+             emailext body: "${CUERPO_CORREO} exitosa", subject: "${TITULO_CORREO}", to: "${LISTA_CORREOS}"
         }
         failure {
-            emailext body: "La prueba tuvo un fallo", subject: "Aviso", to: "josecursoci@gmail.com"
+            emailext body: "${CUERPO_CORREO} fallida", subject: "${TITULO_CORREO}", to: "${LISTA_CORREOS}"
         }
      }
 
