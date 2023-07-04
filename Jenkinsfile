@@ -2,7 +2,12 @@ pipeline{
     agent {
         label "linux-agent"
     }
-
+  
+    environment {
+        LISTA_CORREOS = "josecursoci@gmail.com"
+        CUERPO_CORREO = "El pipeline ${BUILD_URL} terminó su prueba de manera"
+        TITULO_CORREO = "${BUILD_URL} Resultado"
+    }
     stages{
 
         stage("Confirmación despliegue"){
@@ -27,7 +32,6 @@ pipeline{
             }
         }
 
-
         stage ("Compilación de la aplicación"){
             steps{
                 sh "npm run build"
@@ -38,10 +42,10 @@ pipeline{
 
     post{
         success {
-            emailext body: "La prueba fue exitosa", subject: "Aviso", to: "josecursoci@gmail.com"
+             emailext body: "${CUERPO_CORREO} exitosa", subject: "${TITULO_CORREO}", to: "${LISTA_CORREOS}"
         }
         failure {
-            emailext body: "La prueba tuvo un fallo", subject: "Aviso", to: "josecursoci@gmail.com"
+            emailext body: "${CUERPO_CORREO} fallida", subject: "${TITULO_CORREO}", to: "${LISTA_CORREOS}"
         }
      }
 
