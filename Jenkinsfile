@@ -28,7 +28,7 @@ pipeline{
         
         stage ("Prueba unitaria"){
             steps{
-                echo "Comando de las pruebas unitarias npm run test"
+                echo "Pruebas unitarias"
             }
         }
 
